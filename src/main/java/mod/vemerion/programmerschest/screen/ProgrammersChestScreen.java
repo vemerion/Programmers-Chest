@@ -72,10 +72,10 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 			return true;
 		} else {
 			switch (keyCode) {
-	         case 257:
-	         case 335:
-	            enterInput();
-	            return true;
+			case 257:
+			case 335:
+				enterInput();
+				return true;
 			case 259:
 				input.deleteCharAtSelection(-1);
 				return true;
@@ -97,14 +97,15 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 	}
 
 	private void enterInput() {
-		List<IReorderingProcessor> inputLines = font.trimStringToWidth(new StringTextComponent(path + inputText), CONSOLE_WIDTH);
+		List<IReorderingProcessor> inputLines = font.trimStringToWidth(new StringTextComponent(path + inputText),
+				CONSOLE_WIDTH);
 		for (IReorderingProcessor line : inputLines) {
 			output.add(line);
 		}
 		Parser parser = new Parser();
 		Program program = parser.parse(inputText);
 		if (program.isClientOnlyProgram())
-			program.run(this);
+			program.run(this, Minecraft.getInstance().player);
 		inputText = "";
 	}
 
@@ -127,21 +128,23 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		int cursorY = (height - ySize) / 2;
 		blit(matrixStack, x, cursorY, 0, 0, xSize, ySize);
 
-		
 		// Console text
 		int i = 0;
 		int cursorX = guiLeft + CONSOLE_X;
 		for (IReorderingProcessor line : output) {
-			font.func_238407_a_(matrixStack, line, guiLeft + CONSOLE_X, guiTop + CONSOLE_Y + font.FONT_HEIGHT * i, WHITE);
+			font.func_238407_a_(matrixStack, line, guiLeft + CONSOLE_X, guiTop + CONSOLE_Y + font.FONT_HEIGHT * i,
+					WHITE);
 			i++;
 		}
-		
-		List<IReorderingProcessor> inputLines = font.trimStringToWidth(new StringTextComponent(path + inputText), CONSOLE_WIDTH);
+
+		List<IReorderingProcessor> inputLines = font.trimStringToWidth(new StringTextComponent(path + inputText),
+				CONSOLE_WIDTH);
 		for (IReorderingProcessor line : inputLines) {
-			cursorX = font.func_238407_a_(matrixStack, line, guiLeft + CONSOLE_X, guiTop + CONSOLE_Y + font.FONT_HEIGHT * i, WHITE);
+			cursorX = font.func_238407_a_(matrixStack, line, guiLeft + CONSOLE_X,
+					guiTop + CONSOLE_Y + font.FONT_HEIGHT * i, WHITE);
 			i++;
 		}
-		
+
 		// Draw cursor
 		cursorY = guiTop + CONSOLE_Y + font.FONT_HEIGHT * (i - (inputLines.size() == 0 ? 0 : 1));
 		fill(matrixStack, cursorX, cursorY - 1, cursorX + 1, cursorY + font.FONT_HEIGHT, WHITE);
@@ -160,6 +163,11 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		for (IReorderingProcessor line : lines) {
 			output.add(line);
 		}
+	}
+
+	@Override
+	public void close() {
+		closeScreen();		
 	}
 
 }

@@ -1,5 +1,7 @@
 package mod.vemerion.programmerschest.console;
 
+import net.minecraft.entity.player.PlayerEntity;
+
 public abstract class Program {
 	
 	protected String[] args;
@@ -10,6 +12,6 @@ public abstract class Program {
 
 	public abstract boolean isClientOnlyProgram();
 
-	public abstract void run(Console console);
+	public abstract void run(Console console, PlayerEntity user);
 
 }

@@ -5,9 +5,13 @@ public class Parser {
 		s = s.trim().toLowerCase();
 		String[] args = s.split("\\p{Z}+");
 		if (args.length == 0)
-			return new InvalidProgram(s.split(" "));
+			return new InvalidProgram(args);
 		else if (args[0].equals("help"))
 			return new HelpProgram(args);
+		else if (args[0].equals("inv"))
+			return new InvProgram(args);
+		else if (args[0].equals("exit"))
+			return new ExitProgram(args);
 		
 		return new InvalidProgram(s.split(" "));
 	}

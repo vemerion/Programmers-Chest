@@ -2,9 +2,9 @@ package mod.vemerion.programmerschest.console;
 
 import net.minecraft.entity.player.PlayerEntity;
 
-public class HelpProgram extends Program {
+public class ExitProgram extends Program {
 
-	public HelpProgram(String[] args) {
+	public ExitProgram(String[] args) {
 		super(args);
 	}
 
@@ -16,10 +16,9 @@ public class HelpProgram extends Program {
 	@Override
 	public void run(Console console, PlayerEntity user) {
 		if (args.length > 1 && args[1].equals("help")) {
-			console.println("HELP!!");
+			console.println("Exits the chest");
 		} else {
-			console.println("List of commands: help, inv, exit");
-			console.println("Type [command] help to get help about specific command");
+			console.close();
 		}
 	}
 
