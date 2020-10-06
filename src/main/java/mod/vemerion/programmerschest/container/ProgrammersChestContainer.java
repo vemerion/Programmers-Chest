@@ -20,13 +20,13 @@ public class ProgrammersChestContainer extends Container {
 		// Player inventory
 		for (int y = 0; y < 3; ++y) {
 			for (int x = 0; x < 9; ++x) {
-				this.addSlot(new Slot(playerInv, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
+				this.addSlot(new Slot(playerInv, x + y * 9 + 9, 46 + x * 18, 128 + y * 18));
 			}
 		}
 
 		// Player hotbar
 		for (int x = 0; x < 9; ++x) {
-			this.addSlot(new Slot(playerInv, x, 8 + x * 18, 142));
+			this.addSlot(new Slot(playerInv, x, 46 + x * 18, 186));
 		}
 	}
 

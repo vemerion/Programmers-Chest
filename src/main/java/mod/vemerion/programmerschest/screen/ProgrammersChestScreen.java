@@ -1,11 +1,15 @@
 package mod.vemerion.programmerschest.screen;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import mod.vemerion.programmerschest.Main;
+import mod.vemerion.programmerschest.console.Console;
+import mod.vemerion.programmerschest.console.Parser;
+import mod.vemerion.programmerschest.console.Program;
 import mod.vemerion.programmerschest.container.ProgrammersChestContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.fonts.TextInputUtil;
@@ -18,20 +22,22 @@ import net.minecraft.util.SharedConstants;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestContainer> {
+public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestContainer> implements Console {
 
 	private static final int CONSOLE_X = 8;
 	private static final int CONSOLE_Y = 8;
-	private static final int CONSOLE_WIDTH = 160;
-	private static final int CONSOLE_HEIGHT = 70;
+	private static final int CONSOLE_WIDTH = 240;
+	private static final int CONSOLE_HEIGHT = 114;
 	private static final int WHITE = Color.WHITE.getRGB();
 
 	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Main.MODID,
-			"textures/gui/programmers_chest_screen.png");
+			"textures/gui/programmers_chest_screen_big.png");
 
-	private String text = "";
+	private String inputText = "";
+	private String path = "home>";
+	private List<IReorderingProcessor> output;
 
-	private TextInputUtil input = new TextInputUtil(() -> text, (s) -> text = s,
+	private TextInputUtil input = new TextInputUtil(() -> inputText, (s) -> inputText = s,
 			() -> TextInputUtil.getClipboardText(minecraft), (s) -> TextInputUtil.setClipboardText(minecraft, s),
 			(s) -> {
 				return s.length() < 1024 && font.getWordWrappedHeight(s, 114) <= 128;
@@ -44,7 +50,10 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 
 	@Override
 	protected void init() {
+		xSize = 256;
+		ySize = 210;
 		super.init();
+		output = new ArrayList<>();
 	}
 
 	@Override
@@ -63,6 +72,10 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 			return true;
 		} else {
 			switch (keyCode) {
+	         case 257:
+	         case 335:
+	            enterInput();
+	            return true;
 			case 259:
 				input.deleteCharAtSelection(-1);
 				return true;
@@ -83,6 +96,18 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		}
 	}
 
+	private void enterInput() {
+		List<IReorderingProcessor> inputLines = font.trimStringToWidth(new StringTextComponent(path + inputText), CONSOLE_WIDTH);
+		for (IReorderingProcessor line : inputLines) {
+			output.add(line);
+		}
+		Parser parser = new Parser();
+		Program program = parser.parse(inputText);
+		if (program.isClientOnlyProgram())
+			program.run(this);
+		inputText = "";
+	}
+
 	@Override
 	public boolean charTyped(char codePoint, int modifiers) {
 		if (super.charTyped(codePoint, modifiers)) {
@@ -99,13 +124,27 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 			int mouseY) {
 		Minecraft.getInstance().getTextureManager().bindTexture(GUI_TEXTURE);
 		int x = (width - xSize) / 2;
-		int y = (height - ySize) / 2;
-		blit(matrixStack, x, y, 0, 0, xSize, ySize);
+		int cursorY = (height - ySize) / 2;
+		blit(matrixStack, x, cursorY, 0, 0, xSize, ySize);
 
-		List<IReorderingProcessor> lines = font.trimStringToWidth(new StringTextComponent(text), CONSOLE_WIDTH);
-		for (int i = 0; i < lines.size(); i++) {
-			font.func_238407_a_(matrixStack, lines.get(i), guiLeft + CONSOLE_X, guiTop + CONSOLE_Y + font.FONT_HEIGHT * i, WHITE);
+		
+		// Console text
+		int i = 0;
+		int cursorX = guiLeft + CONSOLE_X;
+		for (IReorderingProcessor line : output) {
+			font.func_238407_a_(matrixStack, line, guiLeft + CONSOLE_X, guiTop + CONSOLE_Y + font.FONT_HEIGHT * i, WHITE);
+			i++;
 		}
+		
+		List<IReorderingProcessor> inputLines = font.trimStringToWidth(new StringTextComponent(path + inputText), CONSOLE_WIDTH);
+		for (IReorderingProcessor line : inputLines) {
+			cursorX = font.func_238407_a_(matrixStack, line, guiLeft + CONSOLE_X, guiTop + CONSOLE_Y + font.FONT_HEIGHT * i, WHITE);
+			i++;
+		}
+		
+		// Draw cursor
+		cursorY = guiTop + CONSOLE_Y + font.FONT_HEIGHT * (i - (inputLines.size() == 0 ? 0 : 1));
+		fill(matrixStack, cursorX, cursorY - 1, cursorX + 1, cursorY + font.FONT_HEIGHT, WHITE);
 	}
 
 	@Override
@@ -113,6 +152,14 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 
 		renderHoveredTooltip(matrixStack, mouseX, mouseY);
+	}
+
+	@Override
+	public void println(String s) {
+		List<IReorderingProcessor> lines = font.trimStringToWidth(new StringTextComponent(s), CONSOLE_WIDTH);
+		for (IReorderingProcessor line : lines) {
+			output.add(line);
+		}
 	}
 
 }
