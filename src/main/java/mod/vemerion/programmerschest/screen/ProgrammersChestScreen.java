@@ -7,20 +7,28 @@ import java.util.List;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import mod.vemerion.programmerschest.Main;
-import mod.vemerion.programmerschest.console.Console;
-import mod.vemerion.programmerschest.console.Parser;
-import mod.vemerion.programmerschest.console.Program;
+import mod.vemerion.programmerschest.computer.Console;
+import mod.vemerion.programmerschest.computer.Parser;
+import mod.vemerion.programmerschest.computer.filesystem.DummyFileSystem;
+import mod.vemerion.programmerschest.computer.filesystem.FileSystem;
+import mod.vemerion.programmerschest.computer.program.Program;
 import mod.vemerion.programmerschest.container.ProgrammersChestContainer;
+import mod.vemerion.programmerschest.network.Network;
+import mod.vemerion.programmerschest.network.PrintlnMessage;
+import mod.vemerion.programmerschest.network.ProgramMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.fonts.TextInputUtil;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestContainer> implements Console {
 
@@ -36,6 +44,8 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 	private String inputText = "";
 	private String path = "home>";
 	private List<IReorderingProcessor> output;
+
+	private FileSystem dummy = new DummyFileSystem();
 
 	private TextInputUtil input = new TextInputUtil(() -> inputText, (s) -> inputText = s,
 			() -> TextInputUtil.getClipboardText(minecraft), (s) -> TextInputUtil.setClipboardText(minecraft, s),
@@ -104,8 +114,11 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		}
 		Parser parser = new Parser();
 		Program program = parser.parse(inputText);
-		if (program.isClientOnlyProgram())
-			program.run(this, Minecraft.getInstance().player);
+		if (program.isClientOnlyProgram()) {
+			program.run(this, dummy, Minecraft.getInstance().player);
+		} else {
+			Network.INSTANCE.send(PacketDistributor.SERVER.noArg(), new ProgramMessage(inputText, container.getPos()));
+		}
 		inputText = "";
 	}
 
@@ -158,7 +171,7 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 	}
 
 	@Override
-	public void println(String s) {
+	public void println(String s, PlayerEntity user) {
 		List<IReorderingProcessor> lines = font.trimStringToWidth(new StringTextComponent(s), CONSOLE_WIDTH);
 		for (IReorderingProcessor line : lines) {
 			output.add(line);
@@ -167,7 +180,7 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 
 	@Override
 	public void close() {
-		closeScreen();		
+		closeScreen();
 	}
 
 }

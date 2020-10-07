@@ -1,5 +1,7 @@
-package mod.vemerion.programmerschest.console;
+package mod.vemerion.programmerschest.computer.program;
 
+import mod.vemerion.programmerschest.computer.Console;
+import mod.vemerion.programmerschest.computer.filesystem.FileSystem;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class ExitProgram extends Program {
@@ -14,9 +16,9 @@ public class ExitProgram extends Program {
 	}
 
 	@Override
-	public void run(Console console, PlayerEntity user) {
+	public void run(Console console, FileSystem fileSystem, PlayerEntity user) {
 		if (args.length > 1 && args[1].equals("help")) {
-			console.println("Exits the chest");
+			console.println("Exits the chest", user);
 		} else {
 			console.close();
 		}

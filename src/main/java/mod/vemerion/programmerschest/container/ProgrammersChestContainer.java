@@ -7,15 +7,19 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
 
 public class ProgrammersChestContainer extends Container {
+	
+	private BlockPos pos;
 
 	public ProgrammersChestContainer(int id, PlayerInventory playerInv, PacketBuffer buffer) {
-		this(id, playerInv);
+		this(id, playerInv, buffer.readBlockPos());
 	}
 
-	public ProgrammersChestContainer(int id, PlayerInventory playerInv) {
+	public ProgrammersChestContainer(int id, PlayerInventory playerInv, BlockPos pos) {
 		super(Main.PROGRAMMERS_CHEST_CONTAINER_TYPE, id);
+		this.pos = pos;
 
 		// Player inventory
 		for (int y = 0; y < 3; ++y) {
@@ -40,6 +44,10 @@ public class ProgrammersChestContainer extends Container {
 	@Override
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
 		return ItemStack.EMPTY;
+	}
+
+	public BlockPos getPos() {
+		return pos;
 	}
 
 }

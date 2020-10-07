@@ -2,6 +2,9 @@ package mod.vemerion.programmerschest;
 
 import mod.vemerion.programmerschest.block.ProgrammersChestBlock;
 import mod.vemerion.programmerschest.container.ProgrammersChestContainer;
+import mod.vemerion.programmerschest.network.Network;
+import mod.vemerion.programmerschest.network.PrintlnMessage;
+import mod.vemerion.programmerschest.network.ProgramMessage;
 import mod.vemerion.programmerschest.tileentity.ProgrammersChestTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -15,6 +18,7 @@ import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 @EventBusSubscriber(modid = Main.MODID, bus = EventBusSubscriber.Bus.MOD)
@@ -37,7 +41,8 @@ public class ModEventSubscriber {
 	@SubscribeEvent
 	public static void onTileEntityTypeRegistration(final RegistryEvent.Register<TileEntityType<?>> event) {
 		TileEntityType<ProgrammersChestTileEntity> programmersChestTileEntityType = TileEntityType.Builder
-				.<ProgrammersChestTileEntity>create(ProgrammersChestTileEntity::new, Main.PROGRAMMERS_CHEST_BLOCK).build(null);
+				.<ProgrammersChestTileEntity>create(ProgrammersChestTileEntity::new, Main.PROGRAMMERS_CHEST_BLOCK)
+				.build(null);
 
 		event.getRegistry().register(setup(programmersChestTileEntityType, "programmers_chest_tile_entity_type"));
 
@@ -48,6 +53,15 @@ public class ModEventSubscriber {
 		event.getRegistry().register(
 				setup(IForgeContainerType.create(ProgrammersChestContainer::new), "programmers_chest_container_type"));
 
+	}
+
+	@SubscribeEvent
+	public static void setup(FMLCommonSetupEvent event) {
+
+		Network.INSTANCE.registerMessage(0, ProgramMessage.class, ProgramMessage::encode, ProgramMessage::decode,
+				ProgramMessage::handle);
+		Network.INSTANCE.registerMessage(1, PrintlnMessage.class, PrintlnMessage::encode, PrintlnMessage::decode,
+				PrintlnMessage::handle);
 	}
 
 	public static <T extends IForgeRegistryEntry<T>> T setup(final T entry, final String name) {
