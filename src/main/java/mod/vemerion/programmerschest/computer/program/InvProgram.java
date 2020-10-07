@@ -18,7 +18,7 @@ public class InvProgram extends Program {
 
 	@Override
 	public void run(Console console, FileSystem fileSystem, PlayerEntity user) {
-		if (args.length > 1 && args[1].equals("help")) {
+		if (needHelp()) {
 			console.println("Prints out the content of the player inventory.", user);
 		} else {
 			StringBuilder sb = new StringBuilder();

@@ -11,6 +11,10 @@ public abstract class Program {
 	public Program(String[] args) {
 		this.args = args;
 	}
+	
+	protected boolean needHelp() {
+		return args.length > 1 && args[1].equals("help");
+	}
 
 	public abstract boolean isClientOnlyProgram();
 

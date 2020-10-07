@@ -17,7 +17,7 @@ public class HelpProgram extends Program {
 
 	@Override
 	public void run(Console console, FileSystem fileSystem, PlayerEntity user) {
-		if (args.length > 1 && args[1].equals("help")) {
+		if (needHelp()) {
 			console.println("HELP!!", user);
 		} else {
 			console.println("List of commands: help, inv, exit", user);

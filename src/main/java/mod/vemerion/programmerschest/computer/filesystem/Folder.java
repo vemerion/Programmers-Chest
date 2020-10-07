@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 
 public class Folder implements File {
+	private static final int MAX_NAME_LENGTH = 15;
 	
 	private List<Folder> children;
 	private List<ItemStackFile> stacks;
@@ -19,9 +20,11 @@ public class Folder implements File {
 		stacks = new ArrayList<>();
 	}
 	
-	public Folder(Folder parent, String name) {
+	public Folder(Folder parent, String name) throws FileSystemException {
 		this(parent);
 		this.name = name;
+		if (name.length() > MAX_NAME_LENGTH)
+			throw new FileSystemException("err: Folder name can not be longer than " + MAX_NAME_LENGTH);
 	}
 
 	@Override

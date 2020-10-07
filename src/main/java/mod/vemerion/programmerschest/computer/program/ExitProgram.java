@@ -17,7 +17,7 @@ public class ExitProgram extends Program {
 
 	@Override
 	public void run(Console console, FileSystem fileSystem, PlayerEntity user) {
-		if (args.length > 1 && args[1].equals("help")) {
+		if (needHelp()) {
 			console.println("Exits the chest", user);
 		} else {
 			console.close();

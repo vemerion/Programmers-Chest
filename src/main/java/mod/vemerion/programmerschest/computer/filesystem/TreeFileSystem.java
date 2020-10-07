@@ -12,7 +12,11 @@ public class TreeFileSystem implements FileSystem {
 	private Folder currentFolder;
 
 	public TreeFileSystem() {
-		root = new Folder(null, "home");
+		try {
+			root = new Folder(null, "home");
+		} catch (FileSystemException e) {
+			e.printStackTrace();
+		}
 		currentFolder = root;
 	}
 

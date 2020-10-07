@@ -20,6 +20,11 @@ public class LsProgram extends Program {
 
 	@Override
 	public void run(Console console, FileSystem fileSystem, PlayerEntity user) {
+		if (needHelp()) {
+			console.println("Lists the content of the current folder.", user);
+			return;
+		}
+		
 		try {
 			List<String> files = fileSystem.ls();
 			StringBuilder sb = new StringBuilder();

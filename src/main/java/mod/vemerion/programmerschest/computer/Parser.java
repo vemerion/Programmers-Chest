@@ -7,6 +7,7 @@ import mod.vemerion.programmerschest.computer.program.InvalidProgram;
 import mod.vemerion.programmerschest.computer.program.LsProgram;
 import mod.vemerion.programmerschest.computer.program.MkdirProgram;
 import mod.vemerion.programmerschest.computer.program.Program;
+import mod.vemerion.programmerschest.computer.program.RmdirProgram;
 
 public class Parser {
 	public Program parse(String s) {
@@ -24,6 +25,8 @@ public class Parser {
 			return new LsProgram(args);
 		else if (args[0].equals("mkdir"))
 			return new MkdirProgram(args);
+		else if (args[0].equals("rmdir"))
+			return new RmdirProgram(args);
 		
 		return new InvalidProgram(s.split(" "));
 	}
