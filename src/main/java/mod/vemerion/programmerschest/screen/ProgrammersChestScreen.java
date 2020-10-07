@@ -42,13 +42,14 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 	private String inputText = "";
 	private String path = "home>";
 	private List<IReorderingProcessor> output;
+	private int linePosition;
 
 	private FileSystem dummy = new DummyFileSystem();
 
 	private TextInputUtil input = new TextInputUtil(() -> inputText, (s) -> inputText = s,
 			() -> TextInputUtil.getClipboardText(minecraft), (s) -> TextInputUtil.setClipboardText(minecraft, s),
 			(s) -> {
-				return s.length() < 1024 && font.getWordWrappedHeight(s, 114) <= 128;
+				return font.getWordWrappedHeight(path + s, CONSOLE_WIDTH) < CONSOLE_HEIGHT;
 			});
 
 	public ProgrammersChestScreen(ProgrammersChestContainer screenContainer, PlayerInventory inv,
@@ -140,24 +141,27 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		blit(matrixStack, x, cursorY, 0, 0, xSize, ySize);
 
 		// Console text
-		int i = 0;
-		int cursorX = guiLeft + CONSOLE_X;
-		for (IReorderingProcessor line : output) {
-			font.func_238407_a_(matrixStack, line, guiLeft + CONSOLE_X, guiTop + CONSOLE_Y + font.FONT_HEIGHT * i,
-					WHITE);
-			i++;
-		}
-
 		List<IReorderingProcessor> inputLines = font.trimStringToWidth(new StringTextComponent(path + inputText),
 				CONSOLE_WIDTH);
+		while ((output.size() + inputLines.size() - linePosition) * font.FONT_HEIGHT > CONSOLE_HEIGHT)
+			linePosition++;
+		
+		int index = 0;
+		int cursorX = guiLeft + CONSOLE_X;
+		for (int i = linePosition; i < output.size(); i++) {
+			font.func_238407_a_(matrixStack, output.get(i), guiLeft + CONSOLE_X, guiTop + CONSOLE_Y + font.FONT_HEIGHT * index,
+					WHITE);
+			index++;
+		}
+
 		for (IReorderingProcessor line : inputLines) {
 			cursorX = font.func_238407_a_(matrixStack, line, guiLeft + CONSOLE_X,
-					guiTop + CONSOLE_Y + font.FONT_HEIGHT * i, WHITE);
-			i++;
+					guiTop + CONSOLE_Y + font.FONT_HEIGHT * index, WHITE);
+			index++;
 		}
 
 		// Draw cursor
-		cursorY = guiTop + CONSOLE_Y + font.FONT_HEIGHT * (i - (inputLines.size() == 0 ? 0 : 1));
+		cursorY = guiTop + CONSOLE_Y + font.FONT_HEIGHT * (index - (inputLines.size() == 0 ? 0 : 1));
 		fill(matrixStack, cursorX, cursorY - 1, cursorX + 1, cursorY + font.FONT_HEIGHT, WHITE);
 	}
 
@@ -166,6 +170,10 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 
 		renderHoveredTooltip(matrixStack, mouseX, mouseY);
+	}
+	
+	@Override
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) { // Override to get rid of 'Inventory' text
 	}
 
 	@Override
