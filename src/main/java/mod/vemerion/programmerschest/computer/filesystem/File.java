@@ -12,4 +12,6 @@ public interface File {
 	public boolean isEmpty();
 	
 	public Folder parent();
+	
+	public String path();
 }

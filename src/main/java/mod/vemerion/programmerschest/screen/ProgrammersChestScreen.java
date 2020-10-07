@@ -14,7 +14,6 @@ import mod.vemerion.programmerschest.computer.filesystem.FileSystem;
 import mod.vemerion.programmerschest.computer.program.Program;
 import mod.vemerion.programmerschest.container.ProgrammersChestContainer;
 import mod.vemerion.programmerschest.network.Network;
-import mod.vemerion.programmerschest.network.PrintlnMessage;
 import mod.vemerion.programmerschest.network.ProgramMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.fonts.TextInputUtil;
@@ -22,7 +21,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedConstants;
@@ -181,6 +179,11 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 	@Override
 	public void close() {
 		closeScreen();
+	}
+
+	@Override
+	public void setPath(String path, PlayerEntity user) {
+		this.path = path + ">";
 	}
 
 }

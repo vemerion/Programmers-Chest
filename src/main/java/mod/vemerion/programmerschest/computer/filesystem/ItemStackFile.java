@@ -38,4 +38,9 @@ public class ItemStackFile implements File {
 		return parent;
 	}
 
+	@Override
+	public String path() {
+		return parent.path() + "/" + name();
+	}
+
 }

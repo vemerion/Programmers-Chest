@@ -18,7 +18,10 @@ public interface FileSystem {
 	List<String> ls() throws FileSystemException;
 
 	void cd(String folder) throws FileSystemException;
-	
+
+	String pwd() throws FileSystemException;
+
 	CompoundNBT save();
+
 	void load(CompoundNBT compound);
 }

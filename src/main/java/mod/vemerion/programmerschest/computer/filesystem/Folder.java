@@ -119,4 +119,8 @@ public class Folder implements File {
 		throw new FileSystemException("err: Folder does not exist");
 	}
 
+	public String path() {
+		return parent == null ? name() : parent().path() + "/" + name();
+	}
+
 }

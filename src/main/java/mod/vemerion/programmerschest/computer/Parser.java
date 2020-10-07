@@ -1,5 +1,6 @@
 package mod.vemerion.programmerschest.computer;
 
+import mod.vemerion.programmerschest.computer.program.CdProgram;
 import mod.vemerion.programmerschest.computer.program.ExitProgram;
 import mod.vemerion.programmerschest.computer.program.HelpProgram;
 import mod.vemerion.programmerschest.computer.program.InvProgram;
@@ -27,7 +28,9 @@ public class Parser {
 			return new MkdirProgram(args);
 		else if (args[0].equals("rmdir"))
 			return new RmdirProgram(args);
+		else if (args[0].equals("cd"))
+			return new CdProgram(args);
 		
-		return new InvalidProgram(s.split(" "));
+		return new InvalidProgram(args);
 	}
 }

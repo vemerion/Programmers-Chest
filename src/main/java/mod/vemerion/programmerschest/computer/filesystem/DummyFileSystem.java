@@ -45,7 +45,12 @@ public class DummyFileSystem implements FileSystem {
 
 	@Override
 	public void load(CompoundNBT compound) {
-		
+
+	}
+
+	@Override
+	public String pwd() throws FileSystemException {
+		throw new FileSystemException("err: Trying to use DummyFileSystem");
 	}
 
 }

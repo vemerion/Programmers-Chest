@@ -5,6 +5,7 @@ import mod.vemerion.programmerschest.container.ProgrammersChestContainer;
 import mod.vemerion.programmerschest.network.Network;
 import mod.vemerion.programmerschest.network.PrintlnMessage;
 import mod.vemerion.programmerschest.network.ProgramMessage;
+import mod.vemerion.programmerschest.network.SetPathMessage;
 import mod.vemerion.programmerschest.tileentity.ProgrammersChestTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -62,6 +63,8 @@ public class ModEventSubscriber {
 				ProgramMessage::handle);
 		Network.INSTANCE.registerMessage(1, PrintlnMessage.class, PrintlnMessage::encode, PrintlnMessage::decode,
 				PrintlnMessage::handle);
+		Network.INSTANCE.registerMessage(2, SetPathMessage.class, SetPathMessage::encode, SetPathMessage::decode,
+				SetPathMessage::handle);
 	}
 
 	public static <T extends IForgeRegistryEntry<T>> T setup(final T entry, final String name) {

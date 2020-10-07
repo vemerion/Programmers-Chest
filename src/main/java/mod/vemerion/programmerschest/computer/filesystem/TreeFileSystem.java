@@ -68,4 +68,9 @@ public class TreeFileSystem implements FileSystem {
 	public void load(CompoundNBT compound) {
 		root.load(compound);
 	}
+
+	@Override
+	public String pwd() throws FileSystemException {
+		return currentFolder.path();
+	}
 }

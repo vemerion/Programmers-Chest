@@ -6,4 +6,6 @@ public interface Console {
 	void println(String s, PlayerEntity user);
 
 	void close();
+	
+	void setPath(String folder, PlayerEntity user);
 }
