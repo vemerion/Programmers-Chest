@@ -1,7 +1,9 @@
 package mod.vemerion.programmerschest.screen;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -35,6 +37,9 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 	private static final int CONSOLE_WIDTH = 240;
 	private static final int CONSOLE_HEIGHT = 114;
 	private static final int WHITE = Color.WHITE.getRGB();
+	
+	private static final int TIMER_X = 10;
+	private static final int TIMER_Y = 136;
 
 	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Main.MODID,
 			"textures/gui/programmers_chest_screen_big.png");
@@ -43,7 +48,7 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 	private String path = "home>";
 	private List<IReorderingProcessor> output;
 	private int linePosition;
-
+	
 	private FileSystem dummy = new DummyFileSystem();
 
 	private TextInputUtil input = new TextInputUtil(() -> inputText, (s) -> inputText = s,
@@ -163,6 +168,14 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		// Draw cursor
 		cursorY = guiTop + CONSOLE_Y + font.FONT_HEIGHT * (index - (inputLines.size() == 0 ? 0 : 1));
 		fill(matrixStack, cursorX, cursorY - 1, cursorX + 1, cursorY + font.FONT_HEIGHT, WHITE);
+		
+		
+		drawAnimations(matrixStack);
+	}
+
+	private void drawAnimations(MatrixStack matrix) {
+		// Timer
+		font.drawString(matrix, String.format("%tM %tS", Calendar.getInstance(), Calendar.getInstance()), guiLeft + TIMER_X, guiTop + TIMER_Y, WHITE);
 	}
 
 	@Override
