@@ -1,6 +1,8 @@
 package mod.vemerion.programmerschest.computer.program;
 
+
 import mod.vemerion.programmerschest.computer.Console;
+import mod.vemerion.programmerschest.computer.filesystem.File;
 import mod.vemerion.programmerschest.computer.filesystem.FileSystem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,7 +26,7 @@ public class InvProgram extends Program {
 			StringBuilder sb = new StringBuilder();
 			for (ItemStack stack : user.inventory.mainInventory) {
 				if (!stack.isEmpty())
-					sb.append(stack.getCount() + ":" + stack.getItem().toString() + "    ");
+					sb.append(stack.getCount() + ":" + File.toFileName(stack.getDisplayName().getString()) + "    ");
 			}
 			console.println(sb.toString(), user);
 		}

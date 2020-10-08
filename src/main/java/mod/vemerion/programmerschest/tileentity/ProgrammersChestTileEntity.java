@@ -5,6 +5,7 @@ import mod.vemerion.programmerschest.computer.Console;
 import mod.vemerion.programmerschest.computer.Parser;
 import mod.vemerion.programmerschest.computer.ServerConsole;
 import mod.vemerion.programmerschest.computer.filesystem.FileSystem;
+import mod.vemerion.programmerschest.computer.filesystem.FileSystemException;
 import mod.vemerion.programmerschest.computer.filesystem.TreeFileSystem;
 import mod.vemerion.programmerschest.computer.program.Program;
 import mod.vemerion.programmerschest.container.ProgrammersChestContainer;
@@ -19,7 +20,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 public class ProgrammersChestTileEntity extends TileEntity implements INamedContainerProvider {
-	
+
 	private FileSystem fileSystem = new TreeFileSystem();
 	private Console console = new ServerConsole();
 
@@ -27,6 +28,8 @@ public class ProgrammersChestTileEntity extends TileEntity implements INamedCont
 		super(Main.PROGRAMMERS_CHEST_TILE_ENTITY_TYPE);
 	}
 
+	// FIXME: MAKE SURE THAT THERE IS ONLY ONE USER AT A TIME
+	
 	@Override
 	public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
 		return new ProgrammersChestContainer(id, playerInv, getPos());
@@ -36,24 +39,31 @@ public class ProgrammersChestTileEntity extends TileEntity implements INamedCont
 	public ITextComponent getDisplayName() {
 		return StringTextComponent.EMPTY;
 	}
-	
+
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		compound.put("fileSystem", fileSystem.save());
 		return super.write(compound);
 	}
-	
+
 	@Override
 	public void read(BlockState state, CompoundNBT nbt) {
 		fileSystem.load(nbt.getCompound("fileSystem"));
 		super.read(state, nbt);
 	}
-	
-	public void runProgram(String argumentString, PlayerEntity user) {
+
+	public void runProgram(String argumentString, PlayerEntity player) {
 		Parser parser = new Parser();
 		Program program = parser.parse(argumentString);
 		if (!program.isClientOnlyProgram())
-			program.run(console, fileSystem, user);
+			program.run(console, fileSystem, player);
+	}
+
+	public void logout(PlayerEntity player) {
+		try {
+			fileSystem.cd("");
+		} catch (FileSystemException e) { // Should never happen, and even if it does, it does not matter
+		}
 	}
 
 }

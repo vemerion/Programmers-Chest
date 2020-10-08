@@ -3,6 +3,7 @@ package mod.vemerion.programmerschest.computer.filesystem;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 
@@ -30,7 +31,7 @@ public class Folder implements File {
 	@Override
 	public CompoundNBT save() {
 		CompoundNBT compound = new CompoundNBT();
-		compound.putString("name", name());
+		compound.putString("name", getName());
 		ListNBT childrenNBT = new ListNBT();
 		for (File child : children) {
 			childrenNBT.add(child.save());
@@ -56,13 +57,13 @@ public class Folder implements File {
 		ListNBT stacksNBT = compound.getList("stacks", 10);
 		for (int i = 0; i < stacksNBT.size(); i++) {
 			ItemStackFile file = new ItemStackFile(this);
-			file.load(childrenNBT.getCompound(i));
+			file.load(stacksNBT.getCompound(i));
 			stacks.add(file);
 		}
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return name;
 	}
 
@@ -71,7 +72,7 @@ public class Folder implements File {
 			throw new FileSystemException("err: Folder name can not be empty");
 		
 		for (Folder f : children) {
-			if (f.name().equals(folder))
+			if (f.getName().equals(folder))
 				throw new FileSystemException("err: Folder with that name already exists");
 		}
 		
@@ -80,7 +81,7 @@ public class Folder implements File {
 
 	public void rmdir(String folder) throws FileSystemException {
 		for (int i = 0; i < children.size(); i++) {
-			if (children.get(i).name().equals(folder)) {
+			if (children.get(i).getName().equals(folder)) {
 				if (children.get(i).isEmpty()) {
 					children.remove(i);
 					return;
@@ -100,9 +101,9 @@ public class Folder implements File {
 	public List<String> ls() {
 		List<String> fileNames = new ArrayList<>();
 		for (File f : children)
-			fileNames.add(f.name());
-		for (File f : stacks)
-			fileNames.add(f.name());
+			fileNames.add(f.getName());
+		for (ItemStackFile f : stacks)
+			fileNames.add(f.getCount() + ":" + f.getName());
 		return fileNames;
 	}
 
@@ -113,14 +114,26 @@ public class Folder implements File {
 
 	public Folder child(String folder) throws FileSystemException {
 		for (Folder f : children) {
-			if (f.name().equals(folder))
+			if (f.getName().equals(folder))
 				return f;
 		}
 		throw new FileSystemException("err: Folder does not exist");
 	}
 
 	public String path() {
-		return parent == null ? name() : parent().path() + "/" + name();
+		return parent == null ? getName() : parent().path() + "/" + getName();
+	}
+
+	public ItemStack put(ItemStack stack) {
+		for (File f : stacks) {
+			stack = f.put(stack);
+		}
+		if (!stack.isEmpty()) {
+			ItemStackFile file = new ItemStackFile(this);
+			file.put(stack);
+			stacks.add(file);
+		}
+		return stack;
 	}
 
 }

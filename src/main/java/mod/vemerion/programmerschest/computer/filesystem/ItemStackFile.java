@@ -1,5 +1,6 @@
 package mod.vemerion.programmerschest.computer.filesystem;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -10,7 +11,11 @@ public class ItemStackFile implements File {
 	
 	public ItemStackFile(Folder parent) {
 		this.parent = parent;
-		handler = new ItemStackHandler();
+		handler = new ItemStackHandler() {
+			public int getSlotLimit(int slot) {
+				return Integer.MAX_VALUE;
+			}
+		};
 	}
 
 	@Override
@@ -24,8 +29,12 @@ public class ItemStackFile implements File {
 	}
 
 	@Override
-	public String name() {
-		return handler.toString();
+	public String getName() {
+		return File.toFileName(handler.getStackInSlot(0).getDisplayName().getString());
+	}
+	
+	public int getCount() {
+		return handler.getStackInSlot(0).getCount();
 	}
 
 	@Override
@@ -40,7 +49,12 @@ public class ItemStackFile implements File {
 
 	@Override
 	public String path() {
-		return parent.path() + "/" + name();
+		return parent.path() + "/" + getName();
+	}
+
+	@Override
+	public ItemStack put(ItemStack stack) {
+		return handler.insertItem(0, stack, false);
 	}
 
 }

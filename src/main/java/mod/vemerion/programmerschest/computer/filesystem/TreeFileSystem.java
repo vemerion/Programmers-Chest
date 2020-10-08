@@ -21,13 +21,12 @@ public class TreeFileSystem implements FileSystem {
 	}
 
 	@Override
-	public void give(ItemStack stack) {
-		// TODO Auto-generated method stub
-
+	public void put(ItemStack stack) {
+		currentFolder.put(stack);
 	}
 
 	@Override
-	public ItemStack take(Item item, int count) {
+	public ItemStack get(Item item, int count) {
 		// TODO Auto-generated method stub
 		return null;
 	}

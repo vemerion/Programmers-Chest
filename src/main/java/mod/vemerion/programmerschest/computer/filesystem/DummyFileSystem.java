@@ -9,12 +9,12 @@ import net.minecraft.nbt.CompoundNBT;
 public class DummyFileSystem implements FileSystem {
 
 	@Override
-	public void give(ItemStack stack) throws FileSystemException {
+	public void put(ItemStack stack) throws FileSystemException {
 		throw new FileSystemException("err: Trying to use DummyFileSystem");
 	}
 
 	@Override
-	public ItemStack take(Item item, int count) throws FileSystemException {
+	public ItemStack get(Item item, int count) throws FileSystemException {
 		throw new FileSystemException("err: Trying to use DummyFileSystem");
 	}
 
@@ -52,5 +52,4 @@ public class DummyFileSystem implements FileSystem {
 	public String pwd() throws FileSystemException {
 		throw new FileSystemException("err: Trying to use DummyFileSystem");
 	}
-
 }

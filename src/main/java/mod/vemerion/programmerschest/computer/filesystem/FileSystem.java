@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 public interface FileSystem {
-	void give(ItemStack stack) throws FileSystemException;
+	void put(ItemStack stack) throws FileSystemException;
 
-	ItemStack take(Item item, int count) throws FileSystemException;
+	ItemStack get(Item item, int count) throws FileSystemException;
 
 	void mkdir(String name) throws FileSystemException;
 
@@ -18,7 +18,7 @@ public interface FileSystem {
 	List<String> ls() throws FileSystemException;
 
 	void cd(String folder) throws FileSystemException;
-
+	
 	String pwd() throws FileSystemException;
 
 	CompoundNBT save();

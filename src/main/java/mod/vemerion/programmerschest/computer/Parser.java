@@ -8,11 +8,12 @@ import mod.vemerion.programmerschest.computer.program.InvalidProgram;
 import mod.vemerion.programmerschest.computer.program.LsProgram;
 import mod.vemerion.programmerschest.computer.program.MkdirProgram;
 import mod.vemerion.programmerschest.computer.program.Program;
+import mod.vemerion.programmerschest.computer.program.PutProgram;
 import mod.vemerion.programmerschest.computer.program.RmdirProgram;
 
 public class Parser {
 	public Program parse(String s) {
-		s = s.trim().toLowerCase();
+		s = s.trim();
 		String[] args = s.split("\\p{Z}+");
 		if (args.length == 0)
 			return new InvalidProgram(args);
@@ -30,6 +31,8 @@ public class Parser {
 			return new RmdirProgram(args);
 		else if (args[0].equals("cd"))
 			return new CdProgram(args);
+		else if (args[0].equals("put"))
+			return new PutProgram(args);
 		
 		return new InvalidProgram(args);
 	}
