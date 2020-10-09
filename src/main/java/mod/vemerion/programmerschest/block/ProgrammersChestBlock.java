@@ -1,5 +1,6 @@
 package mod.vemerion.programmerschest.block;
 
+import mod.vemerion.programmerschest.Main;
 import mod.vemerion.programmerschest.tileentity.ProgrammersChestTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -48,8 +49,16 @@ public class ProgrammersChestBlock extends Block {
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
 			Hand handIn, BlockRayTraceResult hit) {
 		if (!worldIn.isRemote) {
-			INamedContainerProvider containerProvider = getContainer(state, worldIn, pos);
-			NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			if (tileentity != null) {
+				tileentity.getCapability(Main.COMPUTER).ifPresent(c -> {
+					if (!c.isOccupied()) {
+						c.login(player);
+						INamedContainerProvider containerProvider = getContainer(state, worldIn, pos);
+						NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);
+					}
+				});
+			}				
 		}
 		return ActionResultType.SUCCESS;
 	}  

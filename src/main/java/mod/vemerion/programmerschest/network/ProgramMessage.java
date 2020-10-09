@@ -2,7 +2,7 @@ package mod.vemerion.programmerschest.network;
 
 import java.util.function.Supplier;
 
-import mod.vemerion.programmerschest.tileentity.ProgrammersChestTileEntity;
+import mod.vemerion.programmerschest.Main;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,11 +32,8 @@ public class ProgramMessage {
 		context.setPacketHandled(true);
 		context.enqueueWork(() -> {
 			World world = context.getSender().world;
-			if (context.getSender() != null && world.isAreaLoaded(msg.pos, 1) && world.getTileEntity(msg.pos) instanceof ProgrammersChestTileEntity) {
-				ProgrammersChestTileEntity programmersChest = (ProgrammersChestTileEntity) world.getTileEntity(msg.pos);
-				if (programmersChest != null) {
-					programmersChest.runProgram(msg.argumentString, context.getSender());
-				}
+			if (context.getSender() != null && world.isAreaLoaded(msg.pos, 1)) {
+				world.getTileEntity(msg.pos).getCapability(Main.COMPUTER).ifPresent(c -> c.run(msg.argumentString, context.getSender()));
 			}
 		});  
 	}

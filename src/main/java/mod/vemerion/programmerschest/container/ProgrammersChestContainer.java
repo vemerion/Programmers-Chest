@@ -1,7 +1,6 @@
 package mod.vemerion.programmerschest.container;
 
 import mod.vemerion.programmerschest.Main;
-import mod.vemerion.programmerschest.tileentity.ProgrammersChestTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -40,8 +39,8 @@ public class ProgrammersChestContainer extends Container {
 	public void onContainerClosed(PlayerEntity playerIn) {
 		if (!playerIn.world.isRemote) {
 			TileEntity tileEntity = playerIn.world.getTileEntity(getPos());
-			if (tileEntity != null && tileEntity instanceof ProgrammersChestTileEntity)
-				((ProgrammersChestTileEntity) tileEntity).logout(playerIn);
+			if (tileEntity != null)
+				tileEntity.getCapability(Main.COMPUTER).ifPresent(c -> c.logout(playerIn));
 		}
 		super.onContainerClosed(playerIn);
 	}

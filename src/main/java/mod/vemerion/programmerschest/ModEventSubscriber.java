@@ -1,6 +1,8 @@
 package mod.vemerion.programmerschest;
 
 import mod.vemerion.programmerschest.block.ProgrammersChestBlock;
+import mod.vemerion.programmerschest.computer.BasicComputer;
+import mod.vemerion.programmerschest.computer.Computer;
 import mod.vemerion.programmerschest.container.ProgrammersChestContainer;
 import mod.vemerion.programmerschest.network.Network;
 import mod.vemerion.programmerschest.network.PrintlnMessage;
@@ -13,8 +15,14 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.Capability.IStorage;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -42,7 +50,7 @@ public class ModEventSubscriber {
 	@SubscribeEvent
 	public static void onTileEntityTypeRegistration(final RegistryEvent.Register<TileEntityType<?>> event) {
 		TileEntityType<ProgrammersChestTileEntity> programmersChestTileEntityType = TileEntityType.Builder
-				.<ProgrammersChestTileEntity>create(ProgrammersChestTileEntity::new, Main.PROGRAMMERS_CHEST_BLOCK)
+				.<ProgrammersChestTileEntity>create(() -> new ProgrammersChestTileEntity(), Main.PROGRAMMERS_CHEST_BLOCK)
 				.build(null);
 
 		event.getRegistry().register(setup(programmersChestTileEntityType, "programmers_chest_tile_entity_type"));
@@ -58,6 +66,17 @@ public class ModEventSubscriber {
 
 	@SubscribeEvent
 	public static void setup(FMLCommonSetupEvent event) {
+		CapabilityManager.INSTANCE.register(Computer.class, new IStorage<Computer>() {
+			@Override
+			public INBT writeNBT(Capability<Computer> capability, Computer instance, Direction side) {
+				return instance.shutdown();
+			}
+
+			@Override
+			public void readNBT(Capability<Computer> capability, Computer instance, Direction side, INBT nbt) {
+				instance.startup((CompoundNBT) nbt);
+			}
+		}, BasicComputer::new);
 
 		Network.INSTANCE.registerMessage(0, ProgramMessage.class, ProgramMessage::encode, ProgramMessage::decode,
 				ProgramMessage::handle);

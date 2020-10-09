@@ -3,11 +3,14 @@ package mod.vemerion.programmerschest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import mod.vemerion.programmerschest.computer.Computer;
 import mod.vemerion.programmerschest.container.ProgrammersChestContainer;
 import mod.vemerion.programmerschest.tileentity.ProgrammersChestTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -24,4 +27,8 @@ public class Main {
 
 	@ObjectHolder(Main.MODID + ":programmers_chest_block")
 	public static final Block PROGRAMMERS_CHEST_BLOCK = null;
+	
+	@CapabilityInject(Computer.class)
+	public static final Capability<Computer> COMPUTER = null;
+
 }
