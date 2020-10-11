@@ -2,6 +2,7 @@ package mod.vemerion.programmerschest.computer;
 
 import mod.vemerion.programmerschest.computer.program.CdProgram;
 import mod.vemerion.programmerschest.computer.program.ExitProgram;
+import mod.vemerion.programmerschest.computer.program.GetProgram;
 import mod.vemerion.programmerschest.computer.program.HelpProgram;
 import mod.vemerion.programmerschest.computer.program.InvProgram;
 import mod.vemerion.programmerschest.computer.program.InvalidProgram;
@@ -33,6 +34,8 @@ public class Parser {
 			return new CdProgram(args);
 		else if (args[0].equals("put"))
 			return new PutProgram(args);
+		else if (args[0].equals("get"))
+			return new GetProgram(args);
 		
 		return new InvalidProgram(args);
 	}

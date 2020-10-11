@@ -26,9 +26,8 @@ public class TreeFileSystem implements FileSystem {
 	}
 
 	@Override
-	public ItemStack get(Item item, int count) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ItemStack> get(String regex, int count) {
+		return currentFolder.get(regex, count);
 	}
 
 	@Override

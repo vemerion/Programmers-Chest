@@ -136,4 +136,23 @@ public class Folder implements File {
 		return stack;
 	}
 
+	public List<ItemStack> get(String regex, int count) {
+		List<ItemStack> getting = new ArrayList<>();
+		for (File f : stacks) {
+			List<ItemStack> fileStacks = f.get(regex, count);
+			for (ItemStack stack : fileStacks) {
+				count -= stack.getCount();
+				getting.add(stack);
+			}
+			if (count <= 0)
+				break;
+		}
+		
+		for (int i = stacks.size() - 1; i >= 0; i--) {
+			if (stacks.get(i).isEmpty())
+				stacks.remove(i);
+		}
+		return getting;
+	}
+
 }

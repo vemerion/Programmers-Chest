@@ -2,14 +2,13 @@ package mod.vemerion.programmerschest.computer.filesystem;
 
 import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 public interface FileSystem {
 	void put(ItemStack stack) throws FileSystemException;
 
-	ItemStack get(Item item, int count) throws FileSystemException;
+	List<ItemStack> get(String regex, int count) throws FileSystemException;
 
 	void mkdir(String name) throws FileSystemException;
 

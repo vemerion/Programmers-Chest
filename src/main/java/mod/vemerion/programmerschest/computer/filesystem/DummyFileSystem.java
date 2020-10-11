@@ -2,7 +2,6 @@ package mod.vemerion.programmerschest.computer.filesystem;
 
 import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -14,7 +13,7 @@ public class DummyFileSystem implements FileSystem {
 	}
 
 	@Override
-	public ItemStack get(Item item, int count) throws FileSystemException {
+	public List<ItemStack> get(String regex, int count) throws FileSystemException {
 		throw new FileSystemException("err: Trying to use DummyFileSystem");
 	}
 

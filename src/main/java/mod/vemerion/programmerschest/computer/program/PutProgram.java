@@ -11,15 +11,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class PutProgram extends Program {
+public class PutProgram extends ItemProgram {
 
 	public PutProgram(String[] args) {
 		super(args);
-	}
-
-	@Override
-	public boolean isClientOnlyProgram() {
-		return false;
 	}
 
 	@Override
@@ -32,19 +27,9 @@ public class PutProgram extends Program {
 		}
 
 		// Get count
-		int count = Integer.MAX_VALUE;
-		if (args.length > 2) {
-			try {
-				count = Integer.parseInt(args[2]);
-			} catch (NumberFormatException e) {
-				console.println("err: Invalid count", user);
-				return;
-			}
-			if (count <= 0) {
-				console.println("err: Count must be positive", user);
-				return;
-			}
-		}
+		int count = getCount(console, user);
+		if (count == -1)
+			return;
 
 		if (args.length < 2) {
 			console.println("err: Usage: put [item name] [count].", user);

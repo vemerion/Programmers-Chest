@@ -1,14 +1,18 @@
 package mod.vemerion.programmerschest.computer.filesystem;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class ItemStackFile implements File {
-	
+
 	private ItemStackHandler handler;
 	private Folder parent;
-	
+
 	public ItemStackFile(Folder parent) {
 		this.parent = parent;
 		handler = new ItemStackHandler() {
@@ -32,7 +36,7 @@ public class ItemStackFile implements File {
 	public String getName() {
 		return File.toFileName(handler.getStackInSlot(0).getDisplayName().getString());
 	}
-	
+
 	public int getCount() {
 		return handler.getStackInSlot(0).getCount();
 	}
@@ -55,6 +59,11 @@ public class ItemStackFile implements File {
 	@Override
 	public ItemStack put(ItemStack stack) {
 		return handler.insertItem(0, stack, false);
+	}
+
+	@Override
+	public List<ItemStack> get(String regex, int count) {
+		return getName().matches(regex) ? ImmutableList.of(handler.extractItem(0, count, false)) : ImmutableList.of();
 	}
 
 }
