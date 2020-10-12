@@ -44,7 +44,7 @@ public class ModEventSubscriber {
 	@SubscribeEvent
 	public static void onRegisterBlock(RegistryEvent.Register<Block> event) {
 		event.getRegistry().register(
-				setup(new ProgrammersChestBlock(Block.Properties.create(Material.ROCK)), "programmers_chest_block"));
+				setup(new ProgrammersChestBlock(Block.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(2, 6)), "programmers_chest_block"));
 	}
 
 	@SubscribeEvent
