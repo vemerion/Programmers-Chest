@@ -33,6 +33,7 @@ public class ProgrammersChestBlock extends Block {
 		return new ProgrammersChestTileEntity();
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
 		super.eventReceived(state, worldIn, pos, id, param);
@@ -40,6 +41,7 @@ public class ProgrammersChestBlock extends Block {
 		return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {

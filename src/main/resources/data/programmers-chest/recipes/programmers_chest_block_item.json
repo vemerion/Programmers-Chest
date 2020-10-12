@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "brb",
+    "bbb"
+  ],
+  "key":
+  {
+    "b":
+    {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "r":
+    {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "result":
+  {
+    "item": "programmers-chest:programmers_chest_block_item"
+  }
+}
