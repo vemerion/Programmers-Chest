@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class ProgrammersChestContainer extends Container {
 
@@ -45,16 +46,46 @@ public class ProgrammersChestContainer extends Container {
 		super.onContainerClosed(playerIn);
 	}
 
-	// TODO: implement
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
-		return true;
+		TileEntity tileEntity = playerIn.world.getTileEntity(pos);
+		if (tileEntity == null)
+			return false;
+		return playerIn.getDistanceSq(Vector3d.copyCentered(pos)) < 64
+				&& tileEntity.getCapability(Main.COMPUTER).isPresent();
 	}
 
-	// TODO: implement
 	@Override
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-		return ItemStack.EMPTY;
+		ItemStack copy = ItemStack.EMPTY;
+		Slot slot = inventorySlots.get(index);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stack = slot.getStack();
+			copy = stack.copy();
+			if (index >= 9 * 3) {
+				if (!mergeItemStack(stack, 0, 9 * 3, false)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (index < 9 * 3) {
+				if (!mergeItemStack(stack, 9 * 3, 9 * 4, false)) {
+					return ItemStack.EMPTY;
+				}
+			}
+
+			if (stack.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
+			} else {
+				slot.onSlotChanged();
+			}
+
+			if (stack.getCount() == copy.getCount()) {
+				return ItemStack.EMPTY;
+			}
+
+			slot.onTake(playerIn, stack);
+		}
+
+		return copy;
 	}
 
 	public BlockPos getPos() {

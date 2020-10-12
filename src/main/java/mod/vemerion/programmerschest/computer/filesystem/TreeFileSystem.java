@@ -2,7 +2,6 @@ package mod.vemerion.programmerschest.computer.filesystem;
 
 import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
