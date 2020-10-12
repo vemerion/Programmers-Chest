@@ -1,6 +1,12 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "programmers-chest:block/programmers_chest_block"
+    "particle": "programmers-chest:block/programmers_chest_block_fan",
+    "north": "programmers-chest:block/programmers_chest_block_side",
+    "south": "programmers-chest:block/programmers_chest_block_side",
+    "east": "programmers-chest:block/programmers_chest_block_side",
+    "west": "programmers-chest:block/programmers_chest_block_side",
+    "up": "programmers-chest:block/programmers_chest_block_fan",
+    "down": "programmers-chest:block/programmers_chest_block_fan"   
   }
 }
