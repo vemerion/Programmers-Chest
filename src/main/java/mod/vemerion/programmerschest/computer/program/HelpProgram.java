@@ -20,7 +20,7 @@ public class HelpProgram extends Program {
 		if (needHelp()) {
 			console.println("HELP!!", user);
 		} else {
-			console.println("List of commands: help, inv, exit", user);
+			console.println("List of commands: help, inv, exit, cd, get, ls, mkdir, put, rmdir", user);
 			console.println("Type [command] help to get help about specific command", user);
 		}
 	}
