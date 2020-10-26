@@ -24,7 +24,7 @@ public class ProgramMessage {
 	}
 
 	public static ProgramMessage decode(final PacketBuffer buffer) {
-		return new ProgramMessage(buffer.readString(), buffer.readBlockPos());
+		return new ProgramMessage(buffer.readString(200), buffer.readBlockPos());
 	}
 
 	public static void handle(final ProgramMessage msg, final Supplier<NetworkEvent.Context> supplier) {

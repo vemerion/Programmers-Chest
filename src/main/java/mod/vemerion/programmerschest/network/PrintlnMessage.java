@@ -22,7 +22,7 @@ public class PrintlnMessage {
 	}
 
 	public static PrintlnMessage decode(final PacketBuffer buffer) {
-		return new PrintlnMessage(buffer.readString());
+		return new PrintlnMessage(buffer.readString(32767));
 	}
 
 	public static void handle(final PrintlnMessage msg, final Supplier<NetworkEvent.Context> supplier) {

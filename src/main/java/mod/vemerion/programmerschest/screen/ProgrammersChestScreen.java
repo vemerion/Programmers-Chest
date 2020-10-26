@@ -119,6 +119,11 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 		for (IReorderingProcessor line : inputLines) {
 			output.add(line);
 		}
+		if (inputText.length() > 200) {
+			println("Input text too long!", minecraft.player);
+			inputText = "";
+			return;
+		}
 		Parser parser = new Parser();
 		Program program = parser.parse(inputText);
 		if (program.isClientOnlyProgram()) {
@@ -279,13 +284,13 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 			Minecraft.getInstance().getTextureManager().bindTexture(GUI_TEXTURE);
 			blit(matrix, guiLeft + PICTURE_X, guiTop + PICTURE_Y, PICTURE_U + pictureIndex * PICTURE_WIDTH, PICTURE_V,
 					PICTURE_WIDTH, PICTURE_HEIGHT);
-			blit(matrix, guiLeft + ARROW_X, guiTop + ARROW_Y, ARROW_U,
-					ARROW_V + (isArrowDown ? ARROW_HEIGHT : 0), ARROW_WIDTH, ARROW_HEIGHT);
+			blit(matrix, guiLeft + ARROW_X, guiTop + ARROW_Y, ARROW_U, ARROW_V + (isArrowDown ? ARROW_HEIGHT : 0),
+					ARROW_WIDTH, ARROW_HEIGHT);
 
 			// Chest
 			blit(matrix, guiLeft + CHEST_X, guiTop + CHEST_Y, CHEST_U + (isChestOpen ? CHEST_WIDTH : 0), CHEST_V,
 					CHEST_WIDTH, CHEST_HEIGHT);
-			
+
 			// Key
 			if (pictureIndex == 3 && !hasKey)
 				blit(matrix, guiLeft + KEY_X, guiTop + KEY_Y, KEY_U, KEY_V, KEY_WIDTH, KEY_HEIGHT);
@@ -301,7 +306,8 @@ public class ProgrammersChestScreen extends ContainerScreen<ProgrammersChestCont
 			} else if (button == 0 && isInsideArrow(mouseX, mouseY)) {
 				pictureIndex = (pictureIndex + 1) % 4;
 				isArrowDown = true;
-			} else if (pictureIndex == 3 && button == 0 && isInside(PICTURE_X, PICTURE_Y, PICTURE_WIDTH, PICTURE_HEIGHT, mouseX, mouseY)) {
+			} else if (pictureIndex == 3 && button == 0
+					&& isInside(PICTURE_X, PICTURE_Y, PICTURE_WIDTH, PICTURE_HEIGHT, mouseX, mouseY)) {
 				hasKey = !hasKey;
 			} else if (hasKey && button == 0 && isInside(CHEST_X, CHEST_Y, CHEST_WIDTH, CHEST_HEIGHT, mouseX, mouseY)) {
 				isChestOpen = true;
